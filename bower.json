@@ -15,6 +15,6 @@
     "tests"
   ],
   "dependencies": {
-    "Climacons": "git@github.com:AdamWhitcroft/Climacons.git"
+    "Climacons-Font": "git@github.com:christiannaths/Climacons-Font.git#v1.0"
   }
 }

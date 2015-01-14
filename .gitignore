@@ -2,3 +2,6 @@ bower_components/
 node_modules
 *.log
 lib/
+css/climacons-font.css
+fonts/climacons-font.css
+fonts/demo.html

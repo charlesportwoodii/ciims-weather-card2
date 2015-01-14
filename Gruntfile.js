@@ -13,9 +13,10 @@ module.exports = function(grunt) {
     // Register the tasks we want to run
     grunt.registerTask('default', [
         'bower:install',
+        'copy',
         'concat:css',
         'css_prefix:card',
-        'replace:syntax_prefix',
+        'replace',
         'cssmin:css',
         'concat:js',
         'uglify:js'
@@ -36,7 +37,8 @@ module.exports = function(grunt) {
             bower: 'bower_components',
             lib: 'lib',
             css : 'css',
-            js: 'js'
+            js: 'js',
+            fonts: 'fonts'
         },
 
         bower: {
@@ -45,6 +47,21 @@ module.exports = function(grunt) {
               targetDir: "lib"
             }
           }
+        },
+
+        copy: {
+            main: {
+                expand: true,
+                flatten: true,
+                src:  '<%= paths.lib %>/Climacons-Font/webfont/*.css ',
+                dest: '<%= paths.css %>',
+            },
+            fonts: {
+                expand: true,
+                flatten: true,
+                src:  '<%= paths.lib %>/Climacons-Font/webfont/*',
+                dest: '<%= paths.fonts %>',
+            },
         },
 
         css_prefix: {
@@ -65,6 +82,14 @@ module.exports = function(grunt) {
                 replacements : [{
                     from: '-main-',
                     to: '.<%= carddata() %>'
+                }]
+            },
+            climacons_path: {
+                src: [ 'card.css' ],
+                overwrite: true, 
+                replacements : [{
+                    from: 'climacons-webfont',
+                    to: 'fonts/climacons-webfont'
                 }]
             }
         },
