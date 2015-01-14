@@ -1,0 +1,17 @@
+-main- {
+	background-color: #81daf6 !important;
+	color: #FFF !important;
+}
+
+.footer {
+	border-top: 1px solid #81daf6 !important;
+}
+
+.footer span {
+	color: #FFF !important;
+}
+
+.footer #card-settings-button,
+.footer #card-resize-button {
+	border: none !important;
+}
