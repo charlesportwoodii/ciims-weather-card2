@@ -13,9 +13,11 @@ module.exports = function(grunt) {
     // Register the tasks we want to run
     grunt.registerTask('default', [
         'bower:install',
-        'copy',
-        'concat:css',
+        'copy:root',
         'css_prefix:card',
+        'concat:css',
+        'copy:main',
+        'copy:fonts',
         'replace',
         'cssmin:css',
         'concat:js',
@@ -50,11 +52,17 @@ module.exports = function(grunt) {
         },
 
         copy: {
+            root: {
+                expand: true,
+                flatten: true,
+                src:  '<%= paths.css %>/main.css',
+                dest: '<%= paths.css %>/build',
+            },
             main: {
                 expand: true,
                 flatten: true,
                 src:  '<%= paths.lib %>/Climacons-Font/webfont/*.css ',
-                dest: '<%= paths.css %>',
+                dest: '<%= paths.css %>/build',
             },
             fonts: {
                 expand: true,
@@ -70,7 +78,7 @@ module.exports = function(grunt) {
                     prefix: '<%= carddata() %> .'
                 },
                 files: {
-                    'card.css': ['card.css']
+                    '<%= paths.css %>/build/main.css': ['<%= paths.css %>/build/main.css']
                 }
             }
         },
@@ -97,7 +105,7 @@ module.exports = function(grunt) {
         concat: {
             css: {
                 src: [
-                    '<%= paths.css %>/*',
+                    '<%= paths.css %>/build/*',
                 ],
                 dest: 'card.css'
             },

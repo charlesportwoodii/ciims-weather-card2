@@ -19,6 +19,30 @@
 		 */
 		openWeatherApiURL: "http://api.openweathermap.org/data/2.5/weather",
 
+		/**
+		 * Icon conversion
+		 * @var object
+		 */
+		icons: {
+			"01d": [ "sun" ],
+			"01n": [ "moon" ],
+			"02d": [ "cloud", "sun" ],
+			"02n": [ "cloud", "moon" ],
+			"03d": [ "cloud" ],
+			"03n": [ "cloud" ],
+			"04d": [ "cloud" ],
+			"04n": [ "cloud" ],
+			"09d": [ "cloud", "showers" ],
+			"09n": [ "cloud", "showers" ],
+			"10d": [ "cloud", "sun", "showers" ],
+			"10n": [ "cloud", "moon", "showers" ],
+			"11d": [ "cloud", "lightning" ], 
+			"11n": [ "cloud", "lightning" ],
+			"13d": [ "cloud", "snowflake" ], 
+			"13n": [ "cloud", "snowflake" ],
+			"50d": [ "haze", "sun" ],
+			"50n": [ "haze", "moon" ]
+		},
 
 		init: function() {
 			this.getGeoLoc();
@@ -65,6 +89,24 @@
 	    },
 
 	    /**
+	     * Converts kelvin to farenheit
+	     * @param float kelvin
+	     * @return float
+	     */
+	    kelvinToFarenheit: function(k) {
+	    	return ((k - 273.15) * 1.8 + 32.00).toFixed(0);
+	    },
+
+	    /**
+	     * Converts kelvin to celsius
+	     * @param float kelvin
+	     * @return float
+	     */
+	    kelvinToCelsius: function(k) {
+	    	return (k - 273.15).toFixed(0);
+	    },
+
+	    /**
 	     * Gets the location data
 	     * @param object self 	This object
 	     * @param float lat 	The latitude
@@ -91,7 +133,16 @@
 	     * @param json data 	The JSON location data	
 	     */
 	    setLocationData: function(self, data) {
-	    	console.log(data);
+	    	var location = null;
+
+	    	if (data.city != null && data.city != "")
+	    		location = data.city;
+	    	else if (data.state != null && date.state != "")
+	    		location = date.state;
+
+	    	setTimeout(function() {
+	    		$("#" + self.id + " .header .location").text(location);
+	    	}, 100);
 	    },
 
 	    /**
@@ -112,7 +163,6 @@
 	    			data: {
 	    				"url": self.openWeatherApiURL+"?lat="+lat+"&lon="+lng
 	    			},
-	    			beforeSend: CiiMSDashboard.ajaxBeforeSend(),
 	    			success: function(data, textStatus, jqXHR) {
 	    				weather = data.response;
 	    				self.setLocalStorageItem(self, lat+"/"+lng+"-weather", weather);
@@ -130,7 +180,21 @@
 	     * @param json data 		The JSON location data	
 	     */
 	    setWeatherData: function(self, data) {
-	    	console.log(data);
+	    	var f = self.kelvinToFarenheit(data.main.temp),
+	    		c = self.kelvinToCelsius(data.main.temp),
+	    		icons = self.getIcon(self, data.weather[0].icon);
+
+	    	setTimeout(function() {
+	    		$.each(icons, function(i) {
+    				$("#5xpwrx65dx7gmn29 .weather").addClass(icons[i]);
+	    		});
+
+	    		$("#" + self.id + " .header .temperature .degrees").text(f);
+	    	}, 100);
+	    },
+
+	    getIcon: function(self, icon) {
+	    	return self.icons[icon];
 	    },
 
 	    /**
