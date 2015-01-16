@@ -186,7 +186,7 @@
 
 	    	setTimeout(function() {
 	    		$.each(icons, function(i) {
-    				$("#5xpwrx65dx7gmn29 .weather").addClass(icons[i]);
+    				$("#" + self.id + " .weather").addClass(icons[i]);
 	    		});
 
 	    		$("#" + self.id + " .header .temperature .degrees").text(f);
