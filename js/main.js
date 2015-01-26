@@ -194,7 +194,6 @@
 	    			success: function(data, textStatus, jqXHR) {
 	    				weather = data.response;
 	    				weather["timestamp"] = date.getTime();
-	    				console.log(weather);
 	    				self.setLocalStorageItem(self, lat+"/"+lng+"-weather", weather);
     					self.setWeatherData(self, weather);
 	    			}
@@ -210,7 +209,7 @@
 	     * @param json data 		The JSON location data	
 	     */
 	    setWeatherData: function(self, data) {
-	    	
+
 	    	self.ajaxStatus.weather = true;
 
 	    	var f = self.kelvinToFarenheit(data.main.temp),
