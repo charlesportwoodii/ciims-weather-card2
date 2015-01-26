@@ -58,9 +58,13 @@
 		},
 
 		init: function() {
+			this.startTimeout();
 			this.getGeoLoc();
 		},
 
+		/**
+		 * Creates a async timeout to indicate that the card is loading rather than not doing anything
+		 */
 		startTimeout: function() {
 			var self = this;
 			$("#" + self.id + " #card-settings-button").addClass("fa-spin");
@@ -70,7 +74,7 @@
 					$("#" + self.id + " #card-settings-button").removeClass("fa-spin");
 				else
 					self.startTimeout()
-			}, 1000);
+			}, 500);
 		},
 
 		/**
@@ -81,8 +85,6 @@
 	        var self = this,
 	        	date = new Date,
 	        	locData = self.getLocalStorageItem(self, "lat/lng");
-
-	        self.startTimeout();
 
 	        // Cache the lat/long data for 10 minutes
 	        if (locData == null || locData.timestamp+600000 < date.getTime())
