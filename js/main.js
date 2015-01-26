@@ -20,6 +20,19 @@
 		openWeatherApiURL: "http://api.openweathermap.org/data/2.5/weather",
 
 		/**
+		 * @var timeout 	Status timeout
+		 */
+		completionTimeout: null,
+
+		/**
+		 * @var array		Status indicator
+		 */
+		ajaxStatus: {
+			"location": false,
+			"weather": false
+		},
+
+		/**
 		 * Icon conversion
 		 * @var object
 		 */
@@ -48,6 +61,18 @@
 			this.getGeoLoc();
 		},
 
+		startTimeout: function() {
+			var self = this;
+			$("#" + self.id + " #card-settings-button").addClass("fa-spin");
+
+			self.completionTimeout = setTimeout(function() {
+				if (self.ajaxStatus.weather == true && self.ajaxStatus.location == true)
+					$("#" + self.id + " #card-settings-button").removeClass("fa-spin");
+				else
+					self.startTimeout()
+			}, 1000);
+		},
+
 		/**
 		 * Gets the geolocation from Navigator
 		 * @param object self 	(this)
@@ -56,6 +81,8 @@
 	        var self = this,
 	        	date = new Date,
 	        	locData = self.getLocalStorageItem(self, "lat/lng");
+
+	        self.startTimeout();
 
 	        // Cache the lat/long data for 10 minutes
 	        if (locData == null || locData.timestamp+600000 < date.getTime())
@@ -124,7 +151,6 @@
 	    	}
 	    	else
 		    	self.setLocationData(self, location);
-
 	    },
 
 	    /**
@@ -134,6 +160,7 @@
 	     */
 	    setLocationData: function(self, data) {
 	    	var location = null;
+	    	self.ajaxStatus.location = true;
 
 	    	if (data.city != null && data.city != "")
 	    		location = data.city;
@@ -183,6 +210,9 @@
 	     * @param json data 		The JSON location data	
 	     */
 	    setWeatherData: function(self, data) {
+	    	
+	    	self.ajaxStatus.weather = true;
+
 	    	var f = self.kelvinToFarenheit(data.main.temp),
 	    		c = self.kelvinToCelsius(data.main.temp),
 	    		icons = self.getIcon(self, data.weather[0].icon);
