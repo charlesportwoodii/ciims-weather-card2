@@ -137,8 +137,8 @@
 
 	    	if (data.city != null && data.city != "")
 	    		location = data.city;
-	    	else if (data.state != null && date.state != "")
-	    		location = date.state;
+	    	else if (data.state != null && data.state != "")
+	    		location = data.state;
 
 	    	setTimeout(function() {
 	    		$("#" + self.id + " .header .location").text(location);
@@ -152,9 +152,10 @@
 	     * @param float lng 	The longitude
 	     */
 	    getWeatherData: function(self, lat, lng) {
-	    	var weather = self.getLocalStorageItem(self, lat+"/"+lng+"-weather");
+	    	var weather = self.getLocalStorageItem(self, lat+"/"+lng+"-weather"),
+	    		date = new Date;
 
-	    	if (weather == null)
+	    	if (weather == null || weather.timestamp+600000 < date.getTime())
 	    	{
 	    		$.ajax({
 	    			url: window.location.origin + '/api/default/jsonProxy',
@@ -165,6 +166,8 @@
 	    			},
 	    			success: function(data, textStatus, jqXHR) {
 	    				weather = data.response;
+	    				weather["timestamp"] = date.getTime();
+	    				console.log(weather);
 	    				self.setLocalStorageItem(self, lat+"/"+lng+"-weather", weather);
     					self.setWeatherData(self, weather);
 	    			}
