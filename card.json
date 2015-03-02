@@ -1,7 +1,7 @@
 {
     "name": "WeatherCard",
     "description": "A card to display basic weather information from OpenWeatherMap",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "image": "card.png",
     "footerText": "Powered by OpenWeatherMap",
     "properties": {},
